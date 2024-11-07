@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='fav.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Query Quest</title>
+</head>
+<body>
+    <h1 class="title"> The Great Wedding Whodunit 🔪</h1>
+    
+    <div class="instructions">
+        <h2>Instructions:</h2>
+        <p>The date was <span class="highlight">20th October, 2024</span>. The grand celebration turned into a nightmare. In the city of 
+        Mumbai, it was the joyous wedding of Shah Rukh Khan's cousin that became the backdrop for 
+        a chilling murder. Suspicion rippled through the crowd, and rumors whispered through the air.
+        The police wasted no time in escalating the case to Mumbai's finest: ACP Pradyuman and his
+        team.</p>
+        <p>You, an aspiring detective known for keen observation and logical thinking, have been called in
+        to assist ACP Pradyuman. Every detail counts, but unfortunately, you've misplaced the initial crime scene report, leaving
+        you to rely on only fragments of memory. First spot - <span class="highlight">the "Wedding" hall</span>. <span class="highlight"><br>Three</span> curious identities, all at the heart of the wedding celebration. Good luck, detective! 🔍</p>
+        <p><a href="{{ url_for('static', filename='schema.jpeg') }}" target="_blank" class="link">Click here for schema diagram</a></p>
+    </div>
+    
+    <form action="/query" method="POST" class="query-form">
+        <textarea name="sql_query" rows="6" placeholder="Enter your SQL query here...">{{ query }}</textarea>
+        <input type="submit" value="Submit Query" class="submit-button">
+    </form>
+    
+    {% if message %}
+    <p class="message">{{ message }}</p>
+    {% endif %}
+    
+    {% if error %}
+    <p class="error-message">Error: {{ error }}</p>
+    {% endif %}
+    
+    {% if results %}
+    <h1>Results:</h1>
+    <h2 style="color: yellow;">Showing Top 10 records ...</h2>
+    <table>
+        <thead>
+            <tr>
+                {% for column in results[0].keys() %}
+                <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in results %}
+            <tr>
+                {% for value in row %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% elif query %}
+    <p class="no-results">No records found.</p>
+    {% endif %}
+</body>
+</html>
